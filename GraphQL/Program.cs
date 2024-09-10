@@ -8,6 +8,7 @@ builder.Services
         options => options.UseNpgsql("Host=127.0.0.1;Username=graphql_workshop;Password=secret"))
     .AddGraphQLServer()
     .AddGraphQLTypes()
+    .AddGlobalObjectIdentification()
     .AddMutationConventions();
 
 

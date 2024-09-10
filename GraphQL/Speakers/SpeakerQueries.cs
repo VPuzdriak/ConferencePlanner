@@ -13,6 +13,7 @@ public static class SpeakerQueries
         return await dbContext.Speakers.AsNoTracking().ToListAsync(cancellationToken);
     }
 
+    [NodeResolver]
     public static async Task<Speaker?> GetSpeakerAsync(
         int id,
         ISpeakerByIdDataLoader speakerById,
