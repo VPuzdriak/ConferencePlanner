@@ -7,7 +7,7 @@ namespace ConferencePlanner.GraphQL.Tracks;
 public static class TrackQueries
 {
     public static async Task<IEnumerable<Track>> GetTracksAsync(
-        [Service] ApplicationDbContext dbContext,
+        ApplicationDbContext dbContext,
         CancellationToken cancellationToken)
     {
         return await dbContext.Tracks.AsNoTracking().ToListAsync(cancellationToken);
@@ -20,5 +20,13 @@ public static class TrackQueries
         CancellationToken cancellationToken)
     {
         return await trackById.LoadAsync(id, cancellationToken);
+    }
+
+    public static async Task<IEnumerable<Track>> GetTracksByIdAsync(
+        [ID<Track>] int[] ids,
+        ITrackByIdDataLoader trackById,
+        CancellationToken cancellationToken)
+    {
+        return await trackById.LoadRequiredAsync(ids, cancellationToken);
     }
 }

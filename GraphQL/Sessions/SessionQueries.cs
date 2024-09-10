@@ -7,9 +7,11 @@ namespace ConferencePlanner.GraphQL.Sessions;
 public static class SessionQueries
 {
     public static async Task<IEnumerable<Session>> GetSessionsAsync(
-        [Service] ApplicationDbContext dbContext,
-        CancellationToken cancellationToken) =>
-        await dbContext.Sessions.AsNoTracking().ToListAsync(cancellationToken);
+        ApplicationDbContext dbContext,
+        CancellationToken cancellationToken)
+    {
+        return await dbContext.Sessions.AsNoTracking().ToListAsync(cancellationToken);
+    }
 
     [NodeResolver]
     public static async Task<Session?> GetSessionByIdAsync(
@@ -18,5 +20,13 @@ public static class SessionQueries
         CancellationToken cancellationToken)
     {
         return await sessionById.LoadAsync(id, cancellationToken);
+    }
+
+    public static async Task<IEnumerable<Session>> GetSessionsByIdAsync(
+        [ID<Session>] int[] ids,
+        ISessionByIdDataLoader sessionById,
+        CancellationToken cancellationToken)
+    {
+        return await sessionById.LoadRequiredAsync(ids, cancellationToken);
     }
 }
