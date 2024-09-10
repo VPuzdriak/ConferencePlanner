@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using ConferencePlanner.GraphQL.Extensions;
 
 namespace ConferencePlanner.GraphQL.Data;
 
@@ -7,6 +8,7 @@ public sealed class Speaker
     public int Id { get; init; }
 
     [StringLength(200)]
+    [UseUpperCase]
     public required string Name { get; init; }
 
     [StringLength(4000)]

@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using ConferencePlanner.GraphQL.Extensions;
 
 namespace ConferencePlanner.GraphQL.Data;
 
