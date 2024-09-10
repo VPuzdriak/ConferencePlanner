@@ -1,19 +1,18 @@
 using ConferencePlanner.GraphQL.Data;
 using Microsoft.EntityFrameworkCore;
 
-namespace ConferencePlanner.GraphQL;
+namespace ConferencePlanner.GraphQL.Speakers;
 
-public static class Queries
+[QueryType]
+public static class SpeakerQueries
 {
-    [Query]
     public static async Task<IEnumerable<Speaker>> GetSpeakersAsync(
         ApplicationDbContext dbContext,
         CancellationToken cancellationToken)
     {
         return await dbContext.Speakers.AsNoTracking().ToListAsync(cancellationToken);
     }
-    
-    [Query]
+
     public static async Task<Speaker?> GetSpeakerAsync(
         int id,
         ISpeakerByIdDataLoader speakerById,
