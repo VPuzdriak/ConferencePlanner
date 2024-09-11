@@ -1,5 +1,6 @@
 using ConferencePlanner.GraphQL.Data;
 using Microsoft.EntityFrameworkCore;
+using StackExchange.Redis;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,6 +10,7 @@ builder.Services
     .AddGraphQLServer()
     .AddFiltering()
     .AddSorting()
+    .AddRedisSubscriptions(_ => ConnectionMultiplexer.Connect("127.0.0.1:6379"))
     .AddGraphQLTypes()
     .AddGlobalObjectIdentification()
     .AddMutationConventions();
@@ -16,6 +18,7 @@ builder.Services
 
 var app = builder.Build();
 
+app.UseWebSockets();
 app.MapGraphQL();
 
 await app.RunWithGraphQLCommandsAsync(args);
