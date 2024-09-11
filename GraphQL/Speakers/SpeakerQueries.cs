@@ -6,11 +6,10 @@ namespace ConferencePlanner.GraphQL.Speakers;
 [QueryType]
 public static class SpeakerQueries
 {
-    public static async Task<IEnumerable<Speaker>> GetSpeakersAsync(
-        ApplicationDbContext dbContext,
-        CancellationToken cancellationToken)
+    [UsePaging]
+    public static IQueryable<Speaker> GetSpeakersAsync(ApplicationDbContext dbContext)
     {
-        return await dbContext.Speakers.AsNoTracking().ToListAsync(cancellationToken);
+        return dbContext.Speakers.AsNoTracking().OrderBy(s => s.Name);
     }
 
     [NodeResolver]
@@ -21,7 +20,7 @@ public static class SpeakerQueries
     {
         return await speakerById.LoadAsync(id, cancellationToken);
     }
-    
+
     public static async Task<IEnumerable<Speaker>> GetSpeakersByIdAsync(
         [ID<Speaker>] int[] ids,
         ISpeakerByIdDataLoader speakerById,

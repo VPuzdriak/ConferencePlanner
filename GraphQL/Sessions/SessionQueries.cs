@@ -1,4 +1,5 @@
 using ConferencePlanner.GraphQL.Data;
+using HotChocolate.Data.Sorting;
 using Microsoft.EntityFrameworkCore;
 
 namespace ConferencePlanner.GraphQL.Sessions;
@@ -6,11 +7,19 @@ namespace ConferencePlanner.GraphQL.Sessions;
 [QueryType]
 public static class SessionQueries
 {
-    public static async Task<IEnumerable<Session>> GetSessionsAsync(
-        ApplicationDbContext dbContext,
-        CancellationToken cancellationToken)
+    [UsePaging]
+    [UseFiltering]
+    [UseSorting]
+    public static IQueryable<Session> GetSessionsAsync(ApplicationDbContext dbContext, ISortingContext sortingContext)
     {
-        return await dbContext.Sessions.AsNoTracking().ToListAsync(cancellationToken);
+        var query = dbContext.Sessions.AsNoTracking();
+
+        if (sortingContext.IsDefined)
+        {
+            return query;
+        }
+
+        return query.OrderBy(x => x.Title);
     }
 
     [NodeResolver]
